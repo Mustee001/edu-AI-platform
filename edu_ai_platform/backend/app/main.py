@@ -131,7 +131,7 @@ if root_student.exists():
 def root_redirect():
     return RedirectResponse(url='/dashboard/')
 
-@app.post("/token", response_model=TokenWithRefresh)
+@app.post("/token", response_model=Token)
 def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends()):
     user = authenticate_user(form_data.username, form_data.password)
     if not user:
@@ -145,7 +145,8 @@ def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends()):
         response.set_cookie(key='edu_refresh', value=refresh_token, httponly=True, path='/', max_age=60 * 60 * 24 * 7)
     except Exception:
         pass
-    return TokenWithRefresh(access_token=access_token, refresh_token=refresh_token, token_type="bearer")
+    # return access token only (refresh token delivered in httpOnly cookie)
+    return Token(access_token=access_token, token_type="bearer")
 
 
 @app.post('/token/refresh')
@@ -169,7 +170,8 @@ def token_refresh(payload: dict, request: Request, response: Response):
         response.set_cookie(key='edu_refresh', value=new_refresh, httponly=True, path='/', max_age=60 * 60 * 24 * 7)
     except Exception:
         pass
-    return {"access_token": access_token, "refresh_token": new_refresh, "token_type": "bearer"}
+    # return access token only; refresh token is rotated in cookie
+    return {"access_token": access_token, "token_type": "bearer"}
 
 
 @app.post('/logout')
