@@ -16,6 +16,7 @@ from .models import Student, Lesson
 from .models import Assignment, StudentResponse, Classroom
 from sqlmodel import select
 from fastapi import Response, Request
+import os
 from .models import Assignment, StudentResponse
 from datetime import datetime
 
@@ -142,7 +143,13 @@ def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends()):
     refresh_token = create_refresh_token(payload, expires_delta=60 * 60 * 24 * 7)  # 7 days
     # set httpOnly cookie for refresh token (prototype: secure=False for local dev)
     try:
-        response.set_cookie(key='edu_refresh', value=refresh_token, httponly=True, path='/', max_age=60 * 60 * 24 * 7)
+        # Cookie security attributes: when running in production enable Secure and SameSite
+        cookie_secure = bool(os.environ.get('COOKIE_SECURE') or os.environ.get('PRODUCTION'))
+        # SameSite defaults to 'Lax' for reasonable CSRF protection for navigation-based flows
+        response.set_cookie(
+            key='edu_refresh', value=refresh_token, httponly=True, path='/', max_age=60 * 60 * 24 * 7,
+            secure=cookie_secure, samesite='lax'
+        )
     except Exception:
         pass
     # return access token only (refresh token delivered in httpOnly cookie)
@@ -167,7 +174,11 @@ def token_refresh(payload: dict, request: Request, response: Response):
     new_refresh = create_refresh_token(payload, expires_delta=60 * 60 * 24 * 7)
     access_token = create_access_token(payload, expires_delta=3600 * 24)
     try:
-        response.set_cookie(key='edu_refresh', value=new_refresh, httponly=True, path='/', max_age=60 * 60 * 24 * 7)
+        cookie_secure = bool(os.environ.get('COOKIE_SECURE') or os.environ.get('PRODUCTION'))
+        response.set_cookie(
+            key='edu_refresh', value=new_refresh, httponly=True, path='/', max_age=60 * 60 * 24 * 7,
+            secure=cookie_secure, samesite='lax'
+        )
     except Exception:
         pass
     # return access token only; refresh token is rotated in cookie
