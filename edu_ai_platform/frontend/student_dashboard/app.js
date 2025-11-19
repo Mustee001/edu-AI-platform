@@ -1,8 +1,8 @@
 // Backend base URL — prefer relative when served by the backend.
 const API_BASE = window.API_BASE || ((window.location.port === '8000' || window.location.origin.includes('localhost:8000')) ? '/' : 'http://localhost:8000/');
 
-// Persist token to localStorage so actions don't unexpectedly log out the user.
-let token = localStorage.getItem('edu_token') || null;
+// Keep access token in-memory only for this session (avoid storing access token in localStorage).
+let token = null;
 
 function setAuthHeader(headers){ if(token) headers['Authorization'] = 'Bearer ' + token; }
 
@@ -22,9 +22,8 @@ async function authFetch(url, opts = {}){
           if(rres.ok){
             const rdata = await rres.json();
             token = rdata.access_token;
-            try{ localStorage.setItem('edu_token', token); }catch(e){}
           } else {
-            token = null; localStorage.removeItem('edu_token');
+            token = null;
           }
         })();
         try{ await window.__refreshPromise; } finally { window.__refreshPromise = null; }
@@ -44,13 +43,13 @@ document.getElementById('loginForm').addEventListener('submit', async (e)=>{
   try{
     const res = await fetch(API_BASE + 'token', {method:'POST', body: form});
     if(!res.ok) throw new Error('Login failed');
-    const data = await res.json(); token = data.access_token; try{ localStorage.setItem('edu_token', token); }catch(e){}
+    const data = await res.json(); token = data.access_token;
     document.getElementById('login').style.display = 'none'; document.getElementById('dashboard').style.display = 'block';
     loadAssignments();
   }catch(err){ document.getElementById('loginMsg').innerText = err.message; }
 });
 
-document.getElementById('logout').addEventListener('click', ()=>{ try{ fetch(API_BASE + 'logout', {method:'POST'}); }catch(e){} token = null; localStorage.removeItem('edu_token'); localStorage.removeItem('edu_refresh'); document.getElementById('login').style.display = 'block'; document.getElementById('dashboard').style.display = 'none'; });
+document.getElementById('logout').addEventListener('click', ()=>{ try{ fetch(API_BASE + 'logout', {method:'POST'}); }catch(e){} token = null; document.getElementById('login').style.display = 'block'; document.getElementById('dashboard').style.display = 'none'; });
 
 async function loadAssignments(){
   // find current user
@@ -77,5 +76,4 @@ document.getElementById('submit').addEventListener('click', async ()=>{
   const d = await res.json(); msg.textContent = 'Saved id=' + d.response_id; loadAssignments();
 });
 
-// Auto-load if token exists
-if(token){ document.getElementById('login').style.display = 'none'; document.getElementById('dashboard').style.display = 'block'; loadAssignments(); }
+// Access token is kept in-memory only; users must login after page reload.
