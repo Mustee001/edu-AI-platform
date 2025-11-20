@@ -1,0 +1,15 @@
+body { font-family: 'Nunito', 'Arial', sans-serif; padding: 24px; background: linear-gradient(180deg,#f0fbff 0%, #fff8f5 100%); }
+.container { max-width: 960px; margin: auto; background: linear-gradient(180deg,#ffffff 0%, #fffdf9 100%); padding: 26px; border-radius: 12px; box-shadow: 0 8px 30px rgba(35,31,32,0.06); border: 1px solid rgba(0,0,0,0.04); }
+header h1 { margin:0 0 8px 0; color:#1163a6; font-size:28px; }
+header p.lead { margin:0 0 16px 0; color:#285c7a; }
+label { display:block; margin:8px 0; color:#0c4a6e; font-weight:600; }
+button { padding:8px 14px; margin-top:6px; border-radius: 12px; border: none; background: linear-gradient(90deg,#ffb86b,#ff7aa2); color: white; font-weight:700; cursor:pointer; box-shadow: 0 6px 18px rgba(255,122,162,0.12); }
+button.secondary { background: linear-gradient(90deg,#6bd3ff,#7ae7ff); color:#023047; }
+#assignments { list-style:none; padding-left:0; display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px; }
+#assignments li { background: linear-gradient(180deg,#fff 0%, #fffbf6 100%); padding:12px 14px; border-radius:10px; border: 1px solid rgba(0,0,0,0.04); box-shadow: 0 6px 14px rgba(17,99,166,0.04); display:flex; flex-direction:column; }
+.assignment-id { font-weight:800; color:#d1495b; font-size:14px; }
+.assignment-meta { color:#4b5563; font-size:13px; margin-top:6px; }
+.big-cta { display:inline-block; padding:12px 18px; border-radius:14px; font-size:16px; }
+
+/* mobile tweaks */
+@media (max-width:600px){ .container{ padding:18px } button{ width:100% } }
