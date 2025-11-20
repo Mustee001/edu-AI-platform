@@ -14,6 +14,8 @@ function setAuthHeader(headers){
 async function authFetch(url, opts = {}){
   opts.headers = opts.headers || {};
   setAuthHeader(opts.headers);
+  // explicit credentials to ensure httpOnly refresh cookie is sent on same-origin
+  opts.credentials = opts.credentials || 'same-origin';
   // default credentials mode: omit (we rely on Authorization header)
   // Single-refresh-in-flight guard: if a refresh is already running, wait for it.
   opts.headers = opts.headers || {};
@@ -26,7 +28,7 @@ async function authFetch(url, opts = {}){
         } else {
           window.__refreshPromise = (async ()=>{
             // cookie-based refresh: server stores refresh token in an httpOnly cookie
-            const rres = await fetch(API_BASE + 'token/refresh', {method:'POST'});
+            const rres = await fetch(API_BASE + 'token/refresh', {method:'POST', credentials: opts.credentials});
             if(rres.ok){
               const rdata = await rres.json();
               token = rdata.access_token;
@@ -41,6 +43,7 @@ async function authFetch(url, opts = {}){
         }catch(e){ /* fallthrough to logout */ }
     // token invalid or expired — clear and show login
     token = null; localStorage.removeItem('edu_token');
+    try{ await fetch(API_BASE + 'logout', {method:'POST', credentials: opts.credentials}); }catch(e){}
     document.getElementById('login').style.display = 'block';
     document.getElementById('dashboard').style.display = 'none';
     document.getElementById('loginMsg').innerText = 'Session expired — please login again.';

@@ -9,6 +9,8 @@ function setAuthHeader(headers){ if(token) headers['Authorization'] = 'Bearer ' 
 async function authFetch(url, opts = {}){
   opts.headers = opts.headers || {};
   setAuthHeader(opts.headers);
+  // ensure cookies are sent for same-origin requests (explicit)
+  opts.credentials = opts.credentials || 'same-origin';
   // Single-refresh-in-flight guard: if a refresh is already running, wait for it.
   let res = await fetch(url, opts);
   if(res.status === 401){
@@ -18,7 +20,7 @@ async function authFetch(url, opts = {}){
       } else {
         window.__refreshPromise = (async ()=>{
           // cookie-based refresh
-          const rres = await fetch(API_BASE + 'token/refresh', {method:'POST'});
+          const rres = await fetch(API_BASE + 'token/refresh', {method:'POST', credentials: opts.credentials});
           if(rres.ok){
             const rdata = await rres.json();
             token = rdata.access_token;
@@ -30,7 +32,9 @@ async function authFetch(url, opts = {}){
       }
       if(token){ opts.headers['Authorization'] = 'Bearer ' + token; res = await fetch(url, opts); return res; }
     }catch(e){ /* fallthrough to logout */ }
-    token = null; localStorage.removeItem('edu_token'); localStorage.removeItem('edu_refresh'); document.getElementById('login').style.display = 'block'; document.getElementById('dashboard').style.display = 'none'; document.getElementById('loginMsg').innerText = 'Session expired — please login again.';
+    token = null; localStorage.removeItem('edu_token'); localStorage.removeItem('edu_refresh');
+    try{ await fetch(API_BASE + 'logout', {method:'POST', credentials: opts.credentials}); }catch(e){}
+    document.getElementById('login').style.display = 'block'; document.getElementById('dashboard').style.display = 'none'; document.getElementById('loginMsg').innerText = 'Session expired — please login again.';
   }
   return res;
 }
