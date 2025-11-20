@@ -1,0 +1,44 @@
+[
+  {
+    "item_id": "g4-num-001",
+    "subject": "numeracy",
+    "prompt": "What is 5 + 3?",
+    "options": ["6", "7", "8", "9"],
+    "correct_answer": "8"
+  },
+  {
+    "item_id": "g4-num-002",
+    "subject": "numeracy",
+    "prompt": "What is 10 - 4?",
+    "options": ["5", "6", "7", "8"],
+    "correct_answer": "6"
+  },
+  {
+    "item_id": "g4-num-003",
+    "subject": "numeracy",
+    "prompt": "What is 3 × 4?",
+    "options": ["10", "11", "12", "13"],
+    "correct_answer": "12"
+  },
+  {
+    "item_id": "g4-lit-001",
+    "subject": "literacy",
+    "prompt": "Which word means 'very happy'?",
+    "options": ["sad", "joyful", "angry", "tired"],
+    "correct_answer": "joyful"
+  },
+  {
+    "item_id": "g4-lit-002",
+    "subject": "literacy",
+    "prompt": "What is the opposite of 'big'?",
+    "options": ["large", "small", "tall", "wide"],
+    "correct_answer": "small"
+  },
+  {
+    "item_id": "g4-lit-003",
+    "subject": "literacy",
+    "prompt": "Choose the correct spelling:",
+    "options": ["recieve", "receive", "recive", "receave"],
+    "correct_answer": "receive"
+  }
+]
