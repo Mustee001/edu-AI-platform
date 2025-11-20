@@ -57,7 +57,8 @@ async function loadAssignments(){
   if(!meRes.ok) return;
   const me = await meRes.json();
   const studentId = me.student_id;
-  const res = await authFetch(API_BASE + `teacher/student/${studentId}/assignments`);
+  // students should call the student-facing endpoint which allows students to view their own assignments
+  const res = await authFetch(API_BASE + `students/${studentId}/assignments`);
   const ul = document.getElementById('assignments'); ul.innerHTML = '';
   if(res.ok){ const d = await res.json(); d.assignments.forEach(a=>{ const li = document.createElement('li'); li.textContent = `${a.item_id} — assigned ${a.assigned_at}`; ul.appendChild(li); }); }
 }
