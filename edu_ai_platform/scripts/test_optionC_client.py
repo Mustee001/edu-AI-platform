@@ -5,6 +5,27 @@ if PROJECT_ROOT not in sys.path:
 
 from fastapi.testclient import TestClient
 from backend.app.main import app
+from backend.app.database import init_db, get_session
+from backend.app.models import Student, Lesson
+from sqlmodel import select
+
+init_db()
+
+with get_session() as sess:
+    if not sess.exec(select(Student)).first():
+        sess.add_all([
+            Student(student_id="s1", name="Amina", grade=4),
+            Student(student_id="s2", name="Chinedu", grade=4),
+            Student(student_id="s3", name="Ngozi", grade=4),
+        ])
+        sess.commit()
+
+    if not sess.exec(select(Lesson)).first():
+        sess.add_all([
+            Lesson(item_id="g4-num-001", subject="numeracy", prompt="What is 5 + 3?"),
+            Lesson(item_id="g4-lit-001", subject="literacy", prompt="Which word means 'very happy'?"),
+        ])
+        sess.commit()
 
 client = TestClient(app)
 

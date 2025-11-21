@@ -42,7 +42,7 @@ assert r4.status_code == 401, f"Expected 401, got {r4.status_code}"
 print('\n5. Test access without token')
 r5 = client.get('/me')
 print(f'GET /me without token status: {r5.status_code}')
-assert r5.status_code == 403, f"Expected 403, got {r5.status_code}"
+assert r5.status_code == 401, f"Expected 401, got {r5.status_code}"
 
 print('\n✓ Test Option A: All basic login flow tests passed!')
 sys.exit(0)

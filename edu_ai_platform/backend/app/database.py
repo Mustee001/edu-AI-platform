@@ -1,6 +1,6 @@
 import os
 from sqlmodel import SQLModel, create_engine, Session
-from typing import Generator
+from contextlib import contextmanager
 
 DATABASE_URL = os.environ.get("DATABASE_URL", "sqlite:///./edu_platform.db")
 
@@ -15,10 +15,11 @@ def init_db():
     SQLModel.metadata.create_all(engine)
 
 
-def get_session() -> Generator[Session, None, None]:
+@contextmanager
+def get_session():
     with Session(engine) as session:
         yield session
 
 
-def get_session_sync() -> Session:
+def get_session_sync():
     return Session(engine)

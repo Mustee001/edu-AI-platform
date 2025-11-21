@@ -1,0 +1,14 @@
+{"timestamp": "2025-11-21T11:10:59.030992", "path": "/me", "method": "GET", "status": 401, "auth_header_present": true}
+{"timestamp": "2025-11-21T11:10:59.033828", "path": "/me", "method": "GET", "status": 401, "auth_header_present": false}
+{"timestamp": "2025-11-21T11:11:08.719295", "path": "/me", "method": "GET", "status": 401, "auth_header_present": true}
+{"timestamp": "2025-11-21T11:11:08.722461", "path": "/me", "method": "GET", "status": 401, "auth_header_present": false}
+{"timestamp": "2025-11-21T11:11:12.246898", "path": "/teacher-only", "method": "GET", "status": 403, "auth_header_present": true}
+{"timestamp": "2025-11-21T11:11:12.253025", "path": "/student-only", "method": "GET", "status": 403, "auth_header_present": true}
+{"timestamp": "2025-11-21T11:11:12.258900", "path": "/admin-only", "method": "GET", "status": 403, "auth_header_present": true}
+{"timestamp": "2025-11-21T11:11:53.291943", "path": "/token/refresh", "method": "POST", "status": 401, "auth_header_present": false}
+{"timestamp": "2025-11-21T11:11:57.632614", "path": "/me", "method": "GET", "status": 401, "auth_header_present": true}
+{"timestamp": "2025-11-21T11:11:57.635458", "path": "/me", "method": "GET", "status": 401, "auth_header_present": false}
+{"timestamp": "2025-11-21T11:11:58.781389", "path": "/teacher-only", "method": "GET", "status": 403, "auth_header_present": true}
+{"timestamp": "2025-11-21T11:11:58.789148", "path": "/student-only", "method": "GET", "status": 403, "auth_header_present": true}
+{"timestamp": "2025-11-21T11:11:58.798596", "path": "/admin-only", "method": "GET", "status": 403, "auth_header_present": true}
+{"timestamp": "2025-11-21T11:12:01.032853", "path": "/token/refresh", "method": "POST", "status": 401, "auth_header_present": false}
